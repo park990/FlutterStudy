@@ -45,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(width: 16),
                         Expanded(child: CustomTextField(label: '마감시간')),
                       ],
-                     )
+                     ),
+                     CustomTextField(label: '내용'),
                     ],
                   ),
                 ),

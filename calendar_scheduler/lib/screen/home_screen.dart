@@ -1,7 +1,9 @@
 import 'package:calendar_scheduler/component/custom_text_field.dart';
+import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
 import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/color.dart';
+import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_scheduler/component/calendar.dart';
@@ -20,46 +22,45 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime.now().day,
   );
 
+  // {2023-11-23:[Shedule,Schedule]}
+  Map<DateTime, List<Schedule>> schedules = {
+    DateTime.utc(2025, 11, 28): [
+      Schedule(
+        id: 1,
+        startTime: 11,
+        endTime: 12,
+        content: '플러터 공부하기',
+        date: DateTime.utc(2025,11,28),
+        color: categoryColors[0],
+        createdAt: DateTime.now().toUtc(),
+      ),
+      Schedule(
+        id: 2,
+        startTime: 14,
+        endTime: 16,
+        content: 'Nest.JS 공부하기',
+        date: DateTime.utc(2025,11,28),
+        color: categoryColors[3],
+        createdAt: DateTime.now().toUtc(),
+      ),
+    ],
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (_){
-              return Container(
-                color: Colors.white,
-                height: 600,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8,
-                    right: 8,
-                    top: 16,
-                  ),
-                  child: Column(
-                    children: [
-                     Row(
-                      children: [
-                        Expanded(child: CustomTextField(label: '시작시간')),
-                        SizedBox(width: 16),
-                        Expanded(child: CustomTextField(label: '마감시간')),
-                      ],
-                     ),
-                     CustomTextField(label: '내용'),
-                    ],
-                  ),
-                ),
-              );
+            builder: (_) {
+              return ScheduleBottomSheet();
             },
           );
         },
         backgroundColor: primaryColor,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          ),
-        ),
+        child: Icon(Icons.add, color: Colors.white),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -73,14 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: ListView(
-                  children: [
-                    ScheduleCard(
-                      startTime: DateTime(2024,11,28,11,),
-                      endTime: DateTime(2024,11,28,12,),
-                      content: '플러터 공부하기',
-                      color: Colors.blue,
-                    ),
-                  ],
+                  children: schedules.containsKey(selectedDay)
+                  ? schedules[selectedDay]!
+                  .map(
+                    (e)=>ScheduleCard(
+                      startTime: e.startTime,
+                      endTime: e.endTime,
+                      content: e.content,
+                      color: Color(
+                        int.parse(
+                          'FF${e.color}',
+                          radix: 16,
+                          ),
+                        ),
+                      ),
+                    ).toList()
+                  : []
                 ),
               ),
             ),

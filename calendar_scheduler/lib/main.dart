@@ -12,8 +12,12 @@ void main() async {
   final database = AppDatabase();
   GetIt.I.registerSingleton<AppDatabase>(database);
 
+  final resp = await database.getSchedules();
+  print(resp);
+
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'NotoSans'
       ),

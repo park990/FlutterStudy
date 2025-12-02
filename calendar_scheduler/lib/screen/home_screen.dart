@@ -8,6 +8,7 @@ import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_scheduler/component/calendar.dart';
+import 'package:get_it/get_it.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           );
-          if(schedule == null){
-            return;
-          }
+
           setState(() {
             // schedules={
             //   ...schedules,
@@ -90,23 +89,40 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: FutureBuilder<List<ScheduleTableData>>(
-                  future: null,
-                  builder: (context, asyncSnapshot) {
+                  future: GetIt.I<AppDatabase>().getSchedules(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasError){
+                      return Center(
+                        child: Text(snapshot.error.toString()
+                        ),
+                      );
+                    }
+                    print('호ㅓ호호호호호$snapshot');
+                    if(!snapshot.hasData&&snapshot.connectionState==ConnectionState.waiting){
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final schedules = snapshot.data!;
+
+                    final selectedSchedules = schedules.where(
+                      (e) => e.date.isAtSameMomentAs(selectedDay),
+                      ).toList();
                     return ListView.separated(
-                      itemCount: 0,
+                      itemCount: selectedSchedules.length,
                         itemBuilder: (BuildContext context, int index){
-                    
                           // List로 갖고옴 
                           // final selectedSchedules = schedules[selectedDay]!;
                           // final scheduleModel = selectedSchedules[index];
-                    
-                    
-                          return ScheduleCard(startTime: 12,
-                           endTime: 14,
-                            content: 'test',
+
+                          final schedule = selectedSchedules[index];
+                          return ScheduleCard(
+                            startTime: schedule.startTime,
+                            endTime: schedule.endTime,
+                            content: schedule.content,
                              color: Color(
                               int.parse(
-                                  'FF0000000',
+                                  'FF${schedule.color}',
                                   radix: 16
                                 ),
                               ),

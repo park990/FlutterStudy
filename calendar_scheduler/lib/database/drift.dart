@@ -1,0 +1,38 @@
+
+import 'dart:io';
+import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+import 'package:sqlite3/sqlite3.dart';
+
+import 'package:drift/drift.dart';
+import 'package:calendar_scheduler/model/schedule.dart';
+import 'package:path_provider/path_provider.dart';
+
+part 'drift.g.dart';
+
+@DriftDatabase(
+  tables: [ScheduleTable]
+)
+class AppDatabase extends _$AppDatabase{
+  AppDatabase() : super(_openConnection());
+
+  Future<List<ScheduleTableData>> getSchedules() => select(scheduleTable).get();
+  Future<int> createSchedule(ScheduleTableCompanion data) => into(scheduleTable).insert(data);
+
+  @override
+  int get schemaVersion =>1;
+  
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(()async{
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path,'db.sqlite'));
+
+
+  final cachebase = await getTemporaryDirectory();
+  sqlite3.tempDirectory = cachebase.path;
+
+  return NativeDatabase.createInBackground(file);
+  });
+}

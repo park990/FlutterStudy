@@ -2,9 +2,15 @@ import 'package:calendar_scheduler/const/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator;
   final String label;
   final bool expand;
-  const CustomTextField({super.key, required this.label, this.expand = false});
+  const CustomTextField({super.key, required this.label,
+   this.expand = false,
+   required this.onSaved,
+   required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,11 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey[300],
       ),
+      // 저장 했을때
+      onSaved:onSaved ,
+
+      // 검증 할때
+      validator: validator,
       maxLines: expand ? null : 1,
       minLines: expand ? null : 1,
       expands: expand,

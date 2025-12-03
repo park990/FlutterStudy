@@ -7,10 +7,12 @@ class CustomTextField extends StatelessWidget {
   final FormFieldValidator<String> validator;
   final String label;
   final bool expand;
+  final String? initialValue;
   const CustomTextField({super.key, required this.label,
    this.expand = false,
    required this.onSaved,
-   required this.validator});
+   required this.validator,
+   required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class CustomTextField extends StatelessWidget {
       minLines: expand ? null : 1,
       expands: expand,
       cursorColor: Colors.grey,
+      initialValue: initialValue,
     );
   }
 }

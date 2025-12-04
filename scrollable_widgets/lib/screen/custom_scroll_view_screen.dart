@@ -1,6 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_widgets/const/colors.dart';
 
+class _SliverFixedheaderDelegate
+    extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double maxheight;
+  final double minheight;
+
+  _SliverFixedheaderDelegate({
+    required this.child,
+    required this.maxheight,
+    required this.minheight,
+  });
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  // 최대 높이
+  double get maxExtent => maxheight;
+
+  @override
+  // 최소 높이
+  double get minExtent => minheight;
+
+  @override
+  // covariant - 상속된 클래스도 사용가능
+  // oldDelegate - build가 실행이 됐을 때 이전 Delegate
+  // this-> 새로운 delegate
+  // shouldRebuild-> 새로 build를 해야할지 말지 결정
+  // false -> 빌드 안함 true -> 빌드함
+  bool shouldRebuild(_SliverFixedheaderDelegate oldDelegate) {
+    return oldDelegate.minheight != minheight ||
+        oldDelegate.maxheight != maxheight ||
+        oldDelegate.child != child;
+  }
+}
+
 class CustomScrollViewScreen extends StatelessWidget {
   final List<int> numbers = List.generate(100, (index) => index);
   CustomScrollViewScreen({super.key});
@@ -12,19 +54,38 @@ class CustomScrollViewScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           renderSliverAppbar(),
+          renderHeader(),
+          renderBuilderSliverList(),
+          renderHeader(),
           renderSliverGridBuilder(),
         ],
       ),
     );
   }
 
-
-
-
+  SliverPersistentHeader renderHeader() {
+    return SliverPersistentHeader(
+      // pinned true 로 하면 이 헤더가 쌓임 
+      pinned: true,
+      delegate: _SliverFixedheaderDelegate(
+        child: Container(
+          color: Colors.black,
+          child: Center(
+            child: Text(
+              '신기함',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        minheight: 50,
+        maxheight: 150,
+      ),
+    );
+  }
 
   // AppBar
-  SliverAppBar renderSliverAppbar(){
-    return   SliverAppBar(
+  SliverAppBar renderSliverAppbar() {
+    return SliverAppBar(
       title: Text('CustomScrollViewScreen'),
 
       // 기본이 false인데 true로하면 스크롤 올리면 바로 앱바가 보임
@@ -40,10 +101,9 @@ class CustomScrollViewScreen extends StatelessWidget {
       // true로 하면 최대로 스크롤 할 때 앱바가 늘어남 (안드로이드는 피직스 수정해야된다.)
       stretch: false,
 
-      // 늘어나는 최대 
+      // 늘어나는 최대
       expandedHeight: 100,
-      collapsedHeight: 80, 
-
+      collapsedHeight: 80,
 
       flexibleSpace: FlexibleSpaceBar(
         title: Text('Flexible'),
@@ -52,9 +112,8 @@ class CustomScrollViewScreen extends StatelessWidget {
         // background:Image.asset('경로',fit: BoxFit.cover,
         // ),
       ),
-      );
+    );
   }
-
 
   // Gridview.builder와 비슷함.
   SliverGrid renderSliverGridBuilder() {
@@ -114,7 +173,7 @@ class CustomScrollViewScreen extends StatelessWidget {
           color: rainbowColors[index % rainbowColors.length],
           index: index,
         );
-      }),
+      }, childCount: 14),
     );
   }
 

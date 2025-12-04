@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_widgets/layout/main_layout.dart';
+import 'package:scrollable_widgets/screen/custom_scroll_view_screen.dart';
 import 'package:scrollable_widgets/screen/grid_view_screen.dart';
 import 'package:scrollable_widgets/screen/list_view_screen.dart';
 import 'package:scrollable_widgets/screen/reorderable_list_view_screen.dart';
@@ -27,8 +28,12 @@ class HomeScreen extends StatelessWidget {
       name: 'GridViewScreenH',
     ),
     ScreenModel(
-    builder: (_)=>ReorderableListViewScreen(),
-    name: 'ReorderableListviewScreenH'),
+      builder: (_) => ReorderableListViewScreen(),
+      name: 'ReorderableListviewScreenH',
+    ),
+    ScreenModel(
+      builder:(_)=> CustomScrollViewScreen(),
+       name: 'CustomScrollViewScreenH')
   ];
 
   HomeScreen({super.key});
@@ -48,7 +53,9 @@ class HomeScreen extends StatelessWidget {
                   (screen) => ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: screen.builder),
+                        MaterialPageRoute(
+                          builder: screen.builder,
+                        ),
                       );
                     },
                     child: Text(screen.name),

@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_widgets/layout/main_layout.dart';
+import 'package:scrollable_widgets/screen/grid_view_screen.dart';
+import 'package:scrollable_widgets/screen/list_view_screen.dart';
 import 'package:scrollable_widgets/screen/single_child_scroll.dart';
 
+class ScreenModel {
+  final WidgetBuilder builder;
+  final String name;
+
+  ScreenModel({
+    required this.builder,
+    required this.name,
+  });
+}
+
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final screens = [
+    ScreenModel(
+      builder: (_) => SingleChildScroll(),
+      name: 'SingleChildScrollViewH',
+    ),
+    ScreenModel(
+      builder: (_) => ListViewScreen(),
+      name: 'ListViewScreenH',
+    ),
+    ScreenModel(
+      builder: (_)=>GridViewScreen(),
+      name: 'GridViewScreenH',)
+  ];
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,22 +40,20 @@ class HomeScreen extends StatelessWidget {
           horizontal: 16,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          crossAxisAlignment:
+              CrossAxisAlignment.stretch,
+          children: screens.map(
+            (screen) => ElevatedButton(
               onPressed: (){
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context){
-                      return SingleChildScroll();
-                    }
-                  )
+                  MaterialPageRoute(builder:screen.builder)
                 );
               },
-              child: Text('SingleChild'),
-            ),
-          ],
+              child: Text(screen.name)
+            )
+          ).toList()
         ),
       ),
     );

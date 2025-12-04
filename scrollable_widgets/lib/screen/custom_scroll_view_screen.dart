@@ -11,12 +11,50 @@ class CustomScrollViewScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(title: Text('CustomScrollViewScreen')),
+          renderSliverAppbar(),
           renderSliverGridBuilder(),
         ],
       ),
     );
   }
+
+
+
+
+
+  // AppBar
+  SliverAppBar renderSliverAppbar(){
+    return   SliverAppBar(
+      title: Text('CustomScrollViewScreen'),
+
+      // 기본이 false인데 true로하면 스크롤 올리면 바로 앱바가 보임
+      floating: true,
+
+      // true: 앱바 완전 고정
+      pinned: false,
+
+      // 조금만 올려도 튀어 나오는데 이때는 pinned(고정)을 false로 해야지 작동함
+      // false로 하면 조금만 올리면 앱바가 조금만 내려옴
+      snap: false,
+
+      // true로 하면 최대로 스크롤 할 때 앱바가 늘어남 (안드로이드는 피직스 수정해야된다.)
+      stretch: false,
+
+      // 늘어나는 최대 
+      expandedHeight: 100,
+      collapsedHeight: 80, 
+
+
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text('Flexible'),
+
+        // 아래처럼 늘어나는 곳에 사진도 첨부 할 수 있음
+        // background:Image.asset('경로',fit: BoxFit.cover,
+        // ),
+      ),
+      );
+  }
+
 
   // Gridview.builder와 비슷함.
   SliverGrid renderSliverGridBuilder() {

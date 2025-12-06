@@ -16,7 +16,7 @@ class BasicBarScreen extends StatelessWidget {
             child: TabBar(
               indicatorColor:Colors.red ,
               indicatorWeight: 4,
-              indicatorSize: TabBarIndicatorSize.label,
+              indicatorSize: TabBarIndicatorSize.tab,
               labelColor: Colors.red,
               unselectedLabelColor: Colors.black,
               labelStyle: TextStyle(

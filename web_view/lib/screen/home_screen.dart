@@ -4,7 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 final homeUrl = Uri.parse('https://www.naver.com');
 
 class HomeScreen extends StatelessWidget {
-  //webViewController
+  //webViewControllercheck
   WebViewController controller = WebViewController()
   ..setJavaScriptMode(JavaScriptMode.unrestricted)
   ..loadRequest(homeUrl);

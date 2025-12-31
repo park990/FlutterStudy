@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:navigation/layout/default_layout.dart';
 import 'package:navigation/screen/route3_screen.dart';
 
+// 2026년 1월1일 현재시각 새벽 2시 오늘도 잘 마무리.
 class Route2Screen extends StatelessWidget {
   const Route2Screen({super.key});
 

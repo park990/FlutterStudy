@@ -3,6 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:video_call/const/key.dart';
 
+// 프로젝트 비디오 작업을 위한 커밋
 class CamScreen extends StatefulWidget {
   const CamScreen({super.key});
 
